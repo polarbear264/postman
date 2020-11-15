@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "abab038a-55ea-430e-82d1-cb9074ab83b3",
+		"name": "Bitcoin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://poloniex.com/public?command=returnTicker",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9b48f5d0-50e4-40b8-b280-d05a605d2d42",
+						"exec": [
+							"pm.test(\"Verify 200 status code returns\", function() {",
+							"    var statusCode = pm.response.code;",
+							"    pm.expect(statusCode).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"Verify highestBid field is a string type\", () => {",
+							"    var resp = pm.response.json();",
+							"    _.each(resp, (item) => {",
+							"        pm.expect(item.highestBid).to.be.a(\"string\");",
+							"    });",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://poloniex.com/public?command=returnTicker",
+					"protocol": "https",
+					"host": [
+						"poloniex",
+						"com"
+					],
+					"path": [
+						"public"
+					],
+					"query": [
+						{
+							"key": "command",
+							"value": "returnTicker"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://poloniex.com/public?command=returnTradeHistory&currencyPair={{currency_pair}}&start={{start_date}}&end={{end_date}}",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "62519920-59f3-4b9c-ae4d-7f92da45c95b",
+						"exec": [
+							"var start = Math.floor((Date.now() - (60*60*24*30))/1000);",
+							"pm.environment.set(\"start_date\", start);",
+							"",
+							"var end = start + (60*60*24*7)",
+							"pm.environment.set(\"end_date\", end);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "fc64382a-b178-43ef-a796-c98c765655e9",
+						"exec": [
+							"pm.test(\"Verify 200 status code returns\", function() {",
+							"    var statusCode = pm.response.code;",
+							"    pm.expect(statusCode).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"Verify tradeID field type is a number\", () => {",
+							"    var resp = pm.response.json();",
+							"    _.each(resp, (item) => {",
+							"        pm.expect(item.tradeID).to.be.a(\"number\");",
+							"    });",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://poloniex.com/public?command=returnTradeHistory&currencyPair={{currency_pair}}&start={{start_date}}&end={{end_date}}",
+					"protocol": "https",
+					"host": [
+						"poloniex",
+						"com"
+					],
+					"path": [
+						"public"
+					],
+					"query": [
+						{
+							"key": "command",
+							"value": "returnTradeHistory"
+						},
+						{
+							"key": "currencyPair",
+							"value": "{{currency_pair}}"
+						},
+						{
+							"key": "start",
+							"value": "{{start_date}}"
+						},
+						{
+							"key": "end",
+							"value": "{{end_date}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://poloniex.com/public?command=returnCurrencies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "37a1c32d-d459-4086-961f-60211acee20c",
+						"exec": [
+							"pm.test(\"Verify 200 status code returns\", function() {",
+							"    var statusCode = pm.response.code;",
+							"    pm.expect(statusCode).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"Verify name field type is string\", () => {",
+							"    var resp = pm.response.json();",
+							"    _.each(resp, (item) => {",
+							"        pm.expect(item.name).to.be.a(\"string\");",
+							"    });",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://poloniex.com/public?command=returnCurrencies",
+					"protocol": "https",
+					"host": [
+						"poloniex",
+						"com"
+					],
+					"path": [
+						"public"
+					],
+					"query": [
+						{
+							"key": "command",
+							"value": "returnCurrencies"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
